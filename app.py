@@ -743,10 +743,33 @@ with tabs[3]:
     tab_a, tab_b = st.tabs(["➕ Registrar Ação", "📋 Ações Registradas"])
     
     with tab_a:
+        # Buscar TODOS os beneficiários direto do banco
+        df_todos_ben = pd.read_sql(
+            "SELECT id_beneficiario, nome, mensalidade FROM beneficiarios ORDER BY nome", 
+            services['db'].conn
+        )
+        
         with st.form("form_acao"):
             c1, c2 = st.columns(2)
             with c1:
-                ben_id = st.selectbox("Beneficiário:", df['id_beneficiario']
+                # Selectbox com nome + ID
+                if not df_todos_ben.empty:
+                    opcoes = [
+                        f"{row['id_beneficiario']} - {row['nome']} (R$ {row['mensalidade']:.2f})"
+                        for _, row in df_todos_ben.iterrows()
+                    ]
+                    
+                    ben_selecionado = st.selectbox(
+                        "Beneficiário:",
+                        range(len(opcoes)),
+                        format_func=lambda x: opcoes[x]
+                    )
+                    
+                    # Pegar ID do beneficiário selecionado
+                    ben_id = df_todos_ben.iloc[ben_selecionado]['id_beneficiario']
+                else:
+                    st.warning("⚠️ Nenhum beneficiário cadastrado")
+                    ben_id = None
                 tipo = st.selectbox("Tipo de Ação:", ["Ligação Telefônica", "Desconto Oferecido", "Upgrade Plano", "Visita Presencial"])
                 custo = st.number_input("Custo (R$):", 0.0, 10000.0, 200.0, 50.0)
             with c2:
