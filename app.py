@@ -453,15 +453,15 @@ with st.sidebar:
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
             # Adicionar template beneficiários
-            with open(r'lifepulse-pro\templates\template_beneficiarios.xlsx', 'rb') as f:
+            with open(r'templates\template_beneficiarios.xlsx', 'rb') as f:
                 zip_file.writestr('template_beneficiarios.xlsx', f.read())
             
             # Adicionar template protocolos
-            with open(r'lifepulse-pro\templates\template_protocolos.xlsx', 'rb') as f:
+            with open(r'templates\template_protocolos.xlsx', 'rb') as f:
                 zip_file.writestr('template_protocolos.xlsx', f.read())
             
             # Adicionar template utilização
-            with open(r'lifepulse-pro\templates\template_utilizacao.xlsx', 'rb') as f:
+            with open(r'templates\template_utilizacao.xlsx', 'rb') as f:
                 zip_file.writestr('template_utilizacao.xlsx', f.read())
         
         st.download_button(
@@ -477,7 +477,7 @@ with st.sidebar:
         st.caption("3 arquivos Excel incluídos")
     
     # Downloads individuais
-    with open(r'lifepulse-pro\templates\template_beneficiarios.xlsx', 'rb') as f:
+    with open(r'templates\template_beneficiarios.xlsx', 'rb') as f:
         st.download_button(
             "📄 Beneficiários",
             data=f.read(),
@@ -486,7 +486,7 @@ with st.sidebar:
             use_container_width=True
         )
     
-    with open(r'lifepulse-pro\templates\template_protocolos.xlsx', 'rb') as f:
+    with open(r'templates\template_protocolos.xlsx', 'rb') as f:
         st.download_button(
             "📞 Protocolos SAC",
             data=f.read(),
@@ -495,7 +495,7 @@ with st.sidebar:
             use_container_width=True
         )
     
-    with open(r'lifepulse-pro\templates\template_utilizacao.xlsx', 'rb') as f:
+    with open(r'templates\template_utilizacao.xlsx', 'rb') as f:
         st.download_button(
             "🏥 Utilização Médica",
             data=f.read(),
