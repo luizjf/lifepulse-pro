@@ -81,10 +81,6 @@ Para operadora com 50.000 vidas:
 
 ## 📧 Contato
 
-Desenvolvido por [Seu Nome]
-- LinkedIn: [seu-linkedin]
-- Email: seu-email@exemplo.com
-
-## 📄 Licença
-
-MIT License - veja [LICENSE](LICENSE) para detalhes
+Desenvolvido por Luiz Gustavo
+- LinkedIn: https://www.linkedin.com/in/luiz-gustavo-de-jesus-77899b256/
+- Email: luizgustavojf02@gmail.com
