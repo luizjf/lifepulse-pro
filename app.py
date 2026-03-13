@@ -742,31 +742,11 @@ with tabs[3]:
     
     tab_a, tab_b = st.tabs(["➕ Registrar Ação", "📋 Ações Registradas"])
     
-    with tab_a:
+        with tab_a:
         with st.form("form_acao"):
-            # Buscar TODOS os beneficiários (não usar df que pode estar filtrado)
-            df_todos = services['db'].get_beneficiarios_ativos()
-            
-            # Criar opções com nome + ID para facilitar seleção
-            opcoes_beneficiarios = [
-                f"{row['id_beneficiario']} - {row['nome']} (R$ {row['mensalidade']:.2f})"
-                for _, row in df_todos.iterrows()
-            ]
-            
-            # Criar mapeamento ID → índice
-            ids_beneficiarios = df_todos['id_beneficiario'].tolist()
-            
             c1, c2 = st.columns(2)
             with c1:
-                # Selectbox com nomes amigáveis
-                ben_selecionado_idx = st.selectbox(
-                    "Beneficiário:",
-                    range(len(opcoes_beneficiarios)),
-                    format_func=lambda x: opcoes_beneficiarios[x]
-                )
-                
-                # Pegar ID real
-                ben_id = ids_beneficiarios[ben_selecionado_idx]
+                ben_id = st.selectbox("Beneficiário:", df['id_beneficiario'].tolist())
             
             if st.form_submit_button("💾 Registrar Ação", use_container_width=True):
                 if analista:
