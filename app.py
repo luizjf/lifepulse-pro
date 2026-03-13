@@ -756,8 +756,15 @@ with tabs[3]:
             
             if st.form_submit_button("💾 Registrar Ação", use_container_width=True):
                 if analista:
-                    # Usar database manager para registrar
-                    services['db'].registrar_acao(ben_id, tipo, analista, custo, obs)
+                    # Usar database manager para registrar (INCLUINDO resultado)
+                    services['db'].registrar_acao(
+                        id_beneficiario=ben_id,
+                        tipo_acao=tipo,
+                        analista=analista,
+                        custo_real=custo,
+                        observacoes=obs,
+                        resultado=resultado  # ← FALTAVA ESTE PARÂMETRO!
+                    )
                     st.success("✅ Ação registrada no banco de dados!")
                     st.rerun()
     
