@@ -756,17 +756,33 @@ with tabs[3]:
             
             if st.form_submit_button("💾 Registrar Ação", use_container_width=True):
                 if analista:
-                    # Usar database manager para registrar (INCLUINDO resultado)
-                    services['db'].registrar_acao(
-                        id_beneficiario=ben_id,
-                        tipo_acao=tipo,
-                        analista=analista,
-                        custo_real=custo,
-                        observacoes=obs,
-                        resultado=resultado  # ← FALTAVA ESTE PARÂMETRO!
-                    )
-                    st.success("✅ Ação registrada no banco de dados!")
-                    st.rerun()
+                    try:
+                        # Registrar ação COM resultado
+                        services['db'].registrar_acao(
+                            ben_id,      # id_beneficiario
+                            tipo,        # tipo_acao
+                            analista,    # analista_responsavel
+                            custo,       # custo_real
+                            obs,         # observacoes
+                            resultado    # resultado (NOVO!)
+                        )
+                        st.success(f"✅ Ação registrada: {resultado}")
+                        st.rerun()
+                    except TypeError as e:
+                        # Se a função não aceitar 6 parâmetros, fazer direto no SQL
+                        st.warning("⚠️ Método antigo detectado, usando SQL direto...")
+                        
+                        services['db'].conn.execute("""
+                            INSERT INTO acoes_retencao 
+                            (id_beneficiario, tipo_acao, analista_responsavel, custo_real, observacoes, resultado, data_acao)
+                            VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+                        """, (ben_id, tipo, analista, custo, obs, resultado))
+                        
+                        services['db'].conn.commit()
+                        st.success(f"✅ Ação registrada: {resultado}")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ Erro: {str(e)}")
     
     with tab_b:
         acoes_df = pd.read_sql("SELECT * FROM acoes_retencao ORDER BY data_acao DESC", services['db'].conn)
