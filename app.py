@@ -440,7 +440,9 @@ with st.sidebar:
     # DOWNLOAD DE TEMPLATES
     # ═══════════════════════════════════════════════════════════════════════
     
-    st.markdown("### ⬇️ Templates")
+st.markdown("### ⬇️ Templates")
+    
+    # Caminho base do projeto (funciona em Windows e Linux)
     BASE_DIR = Path(__file__).parent
     TEMPLATES_DIR = BASE_DIR / 'templates'
     
@@ -456,62 +458,82 @@ with st.sidebar:
             # Preparar ZIP com todos os templates
             import io
             import zipfile
-    # Botão para baixar TODOS os templates de uma vez
-    col1, col2 = st.columns([2, 1])
-        
-        zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-            # Adicionar template beneficiários
-            with open(r'templates\template_beneficiarios.xlsx', 'rb') as f:
-                zip_file.writestr('template_beneficiarios.xlsx', f.read())
             
-            # Adicionar template protocolos
-            with open(r'templates\template_protocolos.xlsx', 'rb') as f:
-                zip_file.writestr('template_protocolos.xlsx', f.read())
+            zip_buffer = io.BytesIO()
             
-            # Adicionar template utilização
-            with open(r'templates\template_utilizacao.xlsx', 'rb') as f:
-                zip_file.writestr('template_utilizacao.xlsx', f.read())
+            try:
+                with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                    # Adicionar template beneficiários
+                    template_ben = TEMPLATES_DIR / 'template_beneficiarios.xlsx'
+                    if template_ben.exists():
+                        with open(template_ben, 'rb') as f:
+                            zip_file.writestr('template_beneficiarios.xlsx', f.read())
+                    
+                    # Adicionar template protocolos
+                    template_prot = TEMPLATES_DIR / 'template_protocolos.xlsx'
+                    if template_prot.exists():
+                        with open(template_prot, 'rb') as f:
+                            zip_file.writestr('template_protocolos.xlsx', f.read())
+                    
+                    # Adicionar template utilização
+                    template_util = TEMPLATES_DIR / 'template_utilizacao.xlsx'
+                    if template_util.exists():
+                        with open(template_util, 'rb') as f:
+                            zip_file.writestr('template_utilizacao.xlsx', f.read())
+                
+                st.download_button(
+                    "📦 Baixar TODOS os Templates (ZIP)",
+                    data=zip_buffer.getvalue(),
+                    file_name="lifepulse_templates.zip",
+                    mime="application/zip",
+                    use_container_width=True,
+                    type="primary"
+                )
+            except Exception as e:
+                st.error(f"❌ Erro ao preparar templates: {str(e)}")
         
-        st.download_button(
-            "📦 Baixar TODOS os Templates (ZIP)",
-            data=zip_buffer.getvalue(),
-            file_name="lifepulse_templates.zip",
-            mime="application/zip",
-            use_container_width=True,
-            type="primary"
-        )
-    
-    with col2:
-        st.caption("3 arquivos Excel incluídos")
-    
-    # Downloads individuais
-    with open(r'templates\template_beneficiarios.xlsx', 'rb') as f:
-        st.download_button(
-            "📄 Beneficiários",
-            data=f.read(),
-            file_name="template_beneficiarios.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True
-        )
-    
-    with open(r'templates\template_protocolos.xlsx', 'rb') as f:
-        st.download_button(
-            "📞 Protocolos SAC",
-            data=f.read(),
-            file_name="template_protocolos.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True
-        )
-    
-    with open(r'templates\template_utilizacao.xlsx', 'rb') as f:
-        st.download_button(
-            "🏥 Utilização Médica",
-            data=f.read(),
-            file_name="template_utilizacao.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True
-        )
+        with col2:
+            st.caption("3 arquivos Excel incluídos")
+        
+        # Downloads individuais
+        template_ben = TEMPLATES_DIR / 'template_beneficiarios.xlsx'
+        if template_ben.exists():
+            with open(template_ben, 'rb') as f:
+                st.download_button(
+                    "📄 Beneficiários",
+                    data=f.read(),
+                    file_name="template_beneficiarios.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    use_container_width=True
+                )
+        else:
+            st.warning("⚠️ template_beneficiarios.xlsx não encontrado")
+        
+        template_prot = TEMPLATES_DIR / 'template_protocolos.xlsx'
+        if template_prot.exists():
+            with open(template_prot, 'rb') as f:
+                st.download_button(
+                    "📞 Protocolos SAC",
+                    data=f.read(),
+                    file_name="template_protocolos.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    use_container_width=True
+                )
+        else:
+            st.warning("⚠️ template_protocolos.xlsx não encontrado")
+        
+        template_util = TEMPLATES_DIR / 'template_utilizacao.xlsx'
+        if template_util.exists():
+            with open(template_util, 'rb') as f:
+                st.download_button(
+                    "🏥 Utilização Médica",
+                    data=f.read(),
+                    file_name="template_utilizacao.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    use_container_width=True
+                )
+        else:
+            st.warning("⚠️ template_utilizacao.xlsx não encontrado")
 # ═══════════════════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════════════════
