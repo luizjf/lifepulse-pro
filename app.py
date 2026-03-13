@@ -441,14 +441,23 @@ with st.sidebar:
     # ═══════════════════════════════════════════════════════════════════════
     
     st.markdown("### ⬇️ Templates")
+    BASE_DIR = Path(__file__).parent
+    TEMPLATES_DIR = BASE_DIR / 'templates'
     
+    # Verificar se pasta templates existe
+    if not TEMPLATES_DIR.exists():
+        st.error("❌ Pasta 'templates/' não encontrada")
+        st.info("💡 Certifique-se de que a pasta 'templates' está no repositório Git")
+    else:
+        # Botão para baixar TODOS os templates de uma vez
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            # Preparar ZIP com todos os templates
+            import io
+            import zipfile
     # Botão para baixar TODOS os templates de uma vez
     col1, col2 = st.columns([2, 1])
-    
-    with col1:
-        # Preparar ZIP com todos os templates
-        import io
-        import zipfile
         
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
