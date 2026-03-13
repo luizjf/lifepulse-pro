@@ -746,7 +746,7 @@ with tabs[3]:
         with st.form("form_acao"):
             c1, c2 = st.columns(2)
             with c1:
-                ben_id = st.selectbox("Beneficiário:", df['id_beneficiario'].tolist())
+                ben_id = st.selectbox("Beneficiário:", df['id_beneficiario']
                 tipo = st.selectbox("Tipo de Ação:", ["Ligação Telefônica", "Desconto Oferecido", "Upgrade Plano", "Visita Presencial"])
                 custo = st.number_input("Custo (R$):", 0.0, 10000.0, 200.0, 50.0)
             with c2:
