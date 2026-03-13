@@ -742,11 +742,17 @@ with tabs[3]:
     
     tab_a, tab_b = st.tabs(["➕ Registrar Ação", "📋 Ações Registradas"])
     
-        with tab_a:
-            with st.form("form_acao"):
+    with tab_a:
+        with st.form("form_acao"):
             c1, c2 = st.columns(2)
             with c1:
                 ben_id = st.selectbox("Beneficiário:", df['id_beneficiario'].tolist())
+                tipo = st.selectbox("Tipo de Ação:", ["Ligação Telefônica", "Desconto Oferecido", "Upgrade Plano", "Visita Presencial"])
+                custo = st.number_input("Custo (R$):", 0.0, 10000.0, 200.0, 50.0)
+            with c2:
+                analista = st.text_input("Analista Responsável:")
+                resultado = st.selectbox("Resultado:", ["EM_ABERTO", "RETIDO", "CANCELOU", "SEM_RESPOSTA"])
+                obs = st.text_area("Observações:")
             
             if st.form_submit_button("💾 Registrar Ação", use_container_width=True):
                 if analista:
@@ -758,20 +764,17 @@ with tabs[3]:
                             analista,    # analista_responsavel
                             custo,       # custo_real
                             obs,         # observacoes
-                            resultado    # resultado (NOVO!)
+                            resultado    # resultado
                         )
                         st.success(f"✅ Ação registrada: {resultado}")
                         st.rerun()
-                    except TypeError as e:
-                        # Se a função não aceitar 6 parâmetros, fazer direto no SQL
-                        st.warning("⚠️ Método antigo detectado, usando SQL direto...")
-                        
+                    except TypeError:
+                        # Se a função não aceitar 6 parâmetros, usar SQL direto
                         services['db'].conn.execute("""
                             INSERT INTO acoes_retencao 
                             (id_beneficiario, tipo_acao, analista_responsavel, custo_real, observacoes, resultado, data_acao)
                             VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
                         """, (ben_id, tipo, analista, custo, obs, resultado))
-                        
                         services['db'].conn.commit()
                         st.success(f"✅ Ação registrada: {resultado}")
                         st.rerun()
@@ -784,7 +787,6 @@ with tabs[3]:
             st.info("Nenhuma ação registrada ainda")
         else:
             st.dataframe(acoes_df, use_container_width=True)
-
 # TAB 5: ROI & RESULTADOS
 with tabs[4]:
     st.markdown("### 💰 ROI de Ações de Retenção")
