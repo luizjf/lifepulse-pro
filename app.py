@@ -439,8 +439,7 @@ with st.sidebar:
     # ═══════════════════════════════════════════════════════════════════════
     # DOWNLOAD DE TEMPLATES
     # ═══════════════════════════════════════════════════════════════════════
-    
-st.markdown("### ⬇️ Templates")
+    st.markdown("### ⬇️ Templates")
     
     # Caminho base do projeto (funciona em Windows e Linux)
     BASE_DIR = Path(__file__).parent
@@ -534,6 +533,8 @@ st.markdown("### ⬇️ Templates")
                 )
         else:
             st.warning("⚠️ template_utilizacao.xlsx não encontrado")
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════════════════
