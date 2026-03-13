@@ -743,7 +743,7 @@ with tabs[3]:
     tab_a, tab_b = st.tabs(["➕ Registrar Ação", "📋 Ações Registradas"])
     
         with tab_a:
-        with st.form("form_acao"):
+            with st.form("form_acao"):
             c1, c2 = st.columns(2)
             with c1:
                 ben_id = st.selectbox("Beneficiário:", df['id_beneficiario'].tolist())
